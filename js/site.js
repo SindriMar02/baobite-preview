@@ -158,7 +158,7 @@
     setTimeout(() => {
       if (current !== row) return;
       stage.className = 'preview__stage g-' + (row.dataset.ground || 'flame');
-      pImg.src = row.dataset.hero === '1' ? `img/hero/${photo}.webp` : `img/dish/${photo}.webp`;
+      const dd = DATA[row.dataset.code]; pImg.src = (row.dataset.hero === '1' && dd.big) || dd.img || `img/dish/${photo}.webp`;
       pImg.dataset.code = row.dataset.code;
       pFx.style.opacity = '1';
       pFx.style.transform = 'none';
@@ -273,7 +273,7 @@
     const b = target.getBoundingClientRect();
     if (!a.width || !b.width) return;
     const ghost = document.createElement('img');
-    ghost.src = `img/dish/${DATA[code].photo}.webp`;
+    ghost.src = DATA[code].img || `img/dish/${DATA[code].photo}.webp`;
     ghost.className = 'fly';
     ghost.alt = '';
     ghost.style.width = a.width + 'px';
