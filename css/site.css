@@ -30,7 +30,7 @@
 @media (min-width: 1100px) { :root { --tk: clamp(300px, 24vw, 360px); } }
 
 *, *::before, *::after { box-sizing: border-box; }
-html { color-scheme: light; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--hdr) + 12px); }
+html { color-scheme: light; touch-action: manipulation; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; scroll-padding-top: calc(var(--hdr) + 12px); }
 @media (max-width: 999px) { html { scroll-padding-top: calc(var(--hdr) + 64px); } } /* the sticky filter row sits under the header here */
 body { margin: 0; background: var(--butter); color: var(--night); font: 500 16px/1.5 var(--text); -webkit-font-smoothing: antialiased; overflow-x: clip; }
 img { display: block; max-width: 100%; height: auto; }
@@ -332,6 +332,7 @@ html.no-js .ticket, html.no-js .hdr__ticket { display: none; }
 .ticket[data-state="open"] .ticket__feed { padding: 26px 22px 22px; gap: 18px; }
 .ticket[data-state="open"] .ticket__show { display: block; }
 .ticket[data-state="open"] .trow { grid-template-columns: auto minmax(0, 1fr) auto; font-size: 15px; row-gap: 4px; padding-bottom: 12px; border-bottom: 1px dashed rgba(11, 11, 11, .3); }
+.ticket[data-state="open"] .trow:last-child { border-bottom: 0; padding-bottom: 0; }
 .ticket[data-state="open"] .trow__q { font: 800 34px/.9 var(--display); }
 .ticket[data-state="open"] .trow__c { display: block; grid-column: 2; font: 800 15px/1 var(--display); letter-spacing: .06em; color: var(--chili); }
 .ticket[data-state="open"] .trow__n { grid-column: 2; font: 800 26px/1 var(--display); text-transform: uppercase; }

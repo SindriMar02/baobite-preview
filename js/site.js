@@ -54,9 +54,10 @@
     drawer.hidden = !open;
     burger.setAttribute('aria-expanded', String(open));
     syncInert();
-    if (open) $('.drawer__a', drawer).focus({ preventScroll: true });
+    if (open && byKey) $('.drawer__a', drawer).focus({ preventScroll: true }); // a finger tap keeps focus where it is (no ring)
   };
-  burger.addEventListener('click', () => setDrawer(drawer.hidden));
+  let byKey = false;
+  burger.addEventListener('click', (e) => { byKey = e.detail === 0; setDrawer(drawer.hidden); });
   matchMedia('(min-width: 760px)').addEventListener('change', (e) => { if (e.matches && !drawer.hidden) setDrawer(false); });
 
   /* ------------------------------------------------------------------ in-page links; the logo always lands at the top */
@@ -84,6 +85,8 @@
   function setFilter(k, fromUser) {
     if (k !== 'all' && !KITCHENS.includes(k)) k = 'all';
     $$('.filter').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.kitchen === k)));
+    const row = $('.filters'), on = $('.filter[aria-pressed="true"]');
+    if (row.scrollWidth > row.clientWidth && on) row.scrollTo({ left: Math.max(0, on.offsetLeft - row.offsetLeft - 16), behavior: fromUser ? smooth() : 'auto' }); // keep the active kitchen in view on phones
     items.forEach((li) => { li.hidden = k !== 'all' && li.dataset.kitchen !== k; });
     const url = new URL(location.href);
     if (k === 'all') url.searchParams.delete('k'); else url.searchParams.set('k', k);
@@ -305,7 +308,11 @@
     const bio = new IntersectionObserver((en) => { if (en[0].isIntersecting) { band.classList.add('is-painted'); bio.disconnect(); } }, { rootMargin: '0px 0px -20% 0px' });
     bio.observe(band);
   }
-  const ready = () => requestAnimationFrame(() => requestAnimationFrame(() => root.classList.add('ready')));
+  const ready = () => requestAnimationFrame(() => requestAnimationFrame(() => {
+    root.classList.add('ready');
+    const t = location.hash.length > 1 && document.getElementById(location.hash.slice(1));
+    if (t && t.matches('section')) { const y0 = scrollY; const land = $('h2', t) || t; const y = Math.round(land.getBoundingClientRect().top + scrollY - hdrH() - 24); if (Math.abs(y - y0) > 8) window.scrollTo({ top: y, behavior: 'auto' }); } // a shared #menu link lands on the heading
+  }));
   if (document.fonts && document.fonts.ready) Promise.race([document.fonts.ready, new Promise((r) => setTimeout(r, 900))]).then(ready);
   else ready();
 })();
