@@ -259,14 +259,22 @@ html.no-js .filters { display: none; }
 .row__price { font: 700 clamp(18px, 1.8vw, 24px)/1.12 var(--text); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .row.is-active .row__name { color: var(--flame); }
 @media (hover: hover) and (pointer: fine) { .row:hover .row__name { text-decoration: underline; text-decoration-color: var(--flame); text-decoration-thickness: 2px; text-underline-offset: 5px; } }
+/* phones and tablets have no preview stage, so the photos come into the list: a two-column grid of whole plates (round 3) */
 @media (max-width: 899px) {
-  .row { grid-template-columns: 76px minmax(0, 1fr); column-gap: 14px; }
-  .row__thumb { display: block; grid-column: 1; grid-row: 1 / span 2; width: 76px; align-self: start; }
-  .row__img { width: 76px; height: auto; transition: transform .35s var(--ease); }
-  .row.is-on .row__img { transform: rotate(8deg); }
-  .row__main { grid-column: 2; }
-  .row__buy { grid-column: 2; justify-items: start; grid-auto-flow: column; align-items: center; justify-content: space-between; }
+  .rows { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 16px; }
+  .sect { grid-column: 1 / -1; }
+  .row { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr auto; gap: 6px; align-content: start; }
+  .row__thumb { display: grid; place-items: center; aspect-ratio: 1; margin-bottom: 6px; }
+  .row__thumb--none { display: none; }
+  .row__img { width: 94%; height: auto; max-height: 100%; object-fit: contain; filter: drop-shadow(0 16px 14px rgba(0, 0, 0, .45)); transition: transform .35s var(--ease); }
+  .row.is-on .row__img { transform: rotate(6deg); }
+  .row__name { font: 800 21px/.95 var(--display); text-transform: uppercase; hyphens: auto; }
+  .row__desc { font-size: 13px; }
+  .row__buy { justify-items: start; gap: 0; }
+  .add__plus { justify-content: flex-start; }
 }
+@media (max-width: 359px) { .rows { grid-template-columns: minmax(0, 1fr); } }
+@media (min-width: 600px) and (max-width: 899px) { .rows { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 .preview { display: none; }
 @media (min-width: 900px) {
   .menu__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
