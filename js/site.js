@@ -343,7 +343,8 @@
     if (!drawer.hidden) { root.classList.remove('drawer-open'); drawer.hidden = true; burger.setAttribute('aria-expanded', 'false'); }
     $$('[data-open-ticket]').forEach((b) => b.setAttribute('aria-expanded', 'true'));
     syncInert();
-    $('[data-close-ticket]', ticket).focus({ preventScroll: true });
+    // a keyboard opener lands on Close; a finger or mouse lands quietly on the heading (no ring), Tab still starts there
+    (openedByKey ? $('[data-close-ticket]', ticket) : $('#ticket-h')).focus({ preventScroll: true });
   }
   function closeTicket(restore = true) {
     ticket.dataset.state = 'closed';
@@ -355,7 +356,8 @@
     syncInert();
     if (restore) visibleFocus(opener);
   }
-  $$('[data-open-ticket]').forEach((b) => b.addEventListener('click', () => openTicket(b)));
+  let openedByKey = false;
+  $$('[data-open-ticket]').forEach((b) => b.addEventListener('click', (e) => { openedByKey = e.detail === 0; openTicket(b); }));
   $('[data-close-ticket]', ticket).addEventListener('click', () => closeTicket(true));
   ticket.addEventListener('click', (e) => { if (ticketOpen() && e.target === ticket) closeTicket(true); });
   document.addEventListener('keydown', (e) => {
